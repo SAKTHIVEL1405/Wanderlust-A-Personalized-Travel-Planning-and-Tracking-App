@@ -1,0 +1,142 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// Travel Plan Class
+class TravelPlan {
+    String destination;
+    String startDate;
+    String endDate;
+    ArrayList<String> itinerary;
+    double expenses;
+
+    public TravelPlan(String destination, String startDate, String endDate) {
+        this.destination = destination;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.itinerary = new ArrayList<>();
+        this.expenses = 0.0;
+    }
+
+    // Add an event to the itinerary
+    public void addToItinerary(String event) {
+        itinerary.add(event);
+    }
+
+    // Add an expense
+    public void addExpense(double expense) {
+        this.expenses += expense;
+    }
+
+    // Display travel plan details
+    public void displayPlan() {
+        System.out.println("Destination: " + destination);
+        System.out.println("Start Date: " + startDate);
+        System.out.println("End Date: " + endDate);
+        System.out.println("Itinerary:");
+        for (String event : itinerary) {
+            System.out.println("- " + event);
+        }
+        System.out.println("Total Expenses: $" + expenses);
+    }
+}
+
+// Main Class
+public class TravelPlannerApp {
+
+    static ArrayList<TravelPlan> travelPlans = new ArrayList<>();
+    static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        while (true) {
+            showMenu();
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume the newline character
+
+            switch (choice) {
+                case 1:
+                    addNewPlan();
+                    break;
+                case 2:
+                    viewPlans();
+                    break;
+                case 3:
+                    addExpense();
+                    break;
+                case 4:
+                    addItinerary();
+                    break;
+                case 5:
+                    System.out.println("Exiting the app.");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    // Display main menu
+    public static void showMenu() {
+        System.out.println("\n--- Travel Planner App ---");
+        System.out.println("1. Add a new travel plan");
+        System.out.println("2. View all travel plans");
+        System.out.println("3. Add expense to a trip");
+        System.out.println("4. Add itinerary event to a trip");
+        System.out.println("5. Exit");
+        System.out.print("Enter your choice: ");
+    }
+
+    // Add a new travel plan
+    public static void addNewPlan() {
+        System.out.print("Enter destination: ");
+        String destination = scanner.nextLine();
+        System.out.print("Enter start date (YYYY-MM-DD): ");
+        String startDate = scanner.nextLine();
+        System.out.print("Enter end date (YYYY-MM-DD): ");
+        String endDate = scanner.nextLine();
+
+        TravelPlan newPlan = new TravelPlan(destination, startDate, endDate);
+        travelPlans.add(newPlan);
+        System.out.println("New travel plan added successfully!");
+    }
+
+    // View all travel plans
+    public static void viewPlans() {
+        if (travelPlans.isEmpty()) {
+            System.out.println("No travel plans available.");
+        } else {
+            for (int i = 0; i < travelPlans.size(); i++) {
+                System.out.println("\nTravel Plan #" + (i + 1));
+                travelPlans.get(i).displayPlan();
+            }
+        }
+    }
+
+    // Add expense to a trip
+    public static void addExpense() {
+        System.out.print("Enter travel plan index (1 for the first plan): ");
+        int index = scanner.nextInt() - 1;
+        if (index >= 0 && index < travelPlans.size()) {
+            System.out.print("Enter the expense amount: $");
+            double expense = scanner.nextDouble();
+            travelPlans.get(index).addExpense(expense);
+            System.out.println("Expense added successfully!");
+        } else {
+            System.out.println("Invalid plan index.");
+        }
+    }
+
+    // Add an event to the itinerary
+    public static void addItinerary() {
+        System.out.print("Enter travel plan index (1 for the first plan): ");
+        int index = scanner.nextInt() - 1;
+        scanner.nextLine();  // Consume the newline character
+        if (index >= 0 && index < travelPlans.size()) {
+            System.out.print("Enter the itinerary event description: ");
+            String event = scanner.nextLine();
+            travelPlans.get(index).addToItinerary(event);
+            System.out.println("Event added to itinerary!");
+        } else {
+            System.out.println("Invalid plan index.");
+        }
+    }
+}
